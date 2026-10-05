@@ -40,6 +40,12 @@ class DispatchServer:
 
 		self.deliver_orders(trips)
 
+		print(f'\n{len(self.pending_orders)} Undelivered Orders:')
+		for order in self.pending_orders:
+			print('\t▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄')
+			order.print_details()
+			print('\t▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀')
+
 	def deliver_orders(self, trips: list[list[Order]]):
 		'''Uses the delivery_drone to deliver all of the packaged trips.'''
 		while trips:

@@ -64,15 +64,14 @@ class Drone:
 		else:
 			# Actually deliver the orders, using the drone's current charge
 			battery_level = self.battery_level
-			print('Headed out for delivery:')
+			print('\nHeaded out for delivery:')
 
 		delivered_order_count = 0
 		for order in orders:
 			if not use_simulated_trip:
-				print(
-					f'  Delivering Order #{order.order_id}'
-					+ f' to zone {order.delivery_zone}...'
-				)
+				print('\t▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄')
+				print('\t█ Delivering Order...')
+				order.print_details()
 
 			# Update drone battery, payload weight, and previous desination after
 			# delivering the order
@@ -87,7 +86,8 @@ class Drone:
 			if not use_simulated_trip:
 				order.was_delivered = True
 				delivered_order_count += 1
-				print('    Complete!')
+				print('\t█ ...Success!')
+				print('\t▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀')
 
 		# If this is a real trip, remove delivered orders from the list
 		if not use_simulated_trip:

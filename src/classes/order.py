@@ -40,8 +40,23 @@ class Order:
 		self.is_perishable: bool = is_perishable
 		self.was_delivered: bool = False
 
-	def __str__(self):
+	def __repr__(self):
 		return (
-			f'Order {self.order_id} at {self.timestamp} to {self.delivery_zone}'
-			f' ({self.weight}g)'
+			f'Order {self.order_id} at {self.timestamp} to {self.delivery_zone} '
+			+ f'({self.weight}g)'
+		)
+
+	def print_details(self):
+		'''Prints a formatted list of order details.'''
+		print(
+			f'\t█ - ORDER: #{self.order_id}.\n'
+			f'\t█ - ZONE: {self.delivery_zone}\n'
+			f'\t█ - USER: {self.user_id}\n'
+			f'\t█ - DATE: {self.timestamp:%Y-%m-%d %H:%M}\n'
+			f'\t█ - WEIGHT: {self.weight}\n'
+			f'\t█ - TAGS: '
+			f'\033[36m{'expedited ' if self.is_expedited else ''}\033[0m'
+			f'\033[33m{'fragile ' if self.is_fragile else ''}\033[0m'
+			f'\033[31m{'hazardous ' if self.is_hazardous else ''}\033[0m'
+			f'\033[32m{'perishable ' if self.is_perishable else ''}\033[0m'
 		)
