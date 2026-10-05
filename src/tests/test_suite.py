@@ -7,65 +7,16 @@ fully correct. If you have time, add some tests of your own to help verify your
 solutions.
 '''
 
-from datetime import datetime
-
 from classes.dispatch_server import DispatchServer
 from classes.drone import Drone
-from classes.order import Order
-
-def basic_order(zone: int, weight: float, timestamp: datetime):
-	return Order(
-		order_id = '0',
-		timestamp = timestamp,
-		delivery_zone = zone,
-		weight = weight,
-		user_id = '0',
-		is_expedited = False,
-		is_fragile = False,
-		is_hazardous = False,
-		is_perishable = False,
-	)
-
-BASIC_ORDER_1 = basic_order(
-	zone = 1,
-	weight = 1000,
-	timestamp = datetime(2030, 1, 1),
-)
-
-BASIC_ORDER_2 = basic_order(
-	zone = 1,
-	weight = 1000,
-	timestamp = datetime(2030, 1, 2),
-)
-
-OVERSIZE_ORDER = basic_order(
-	zone = 1,
-	weight = 50000,
-	timestamp = datetime(2030, 1, 3),
-)
-
-LIGHT_ORDER = basic_order(
-	zone = 1,
-	weight = 500,
-	timestamp = datetime(2030, 1, 4),
-)
-
-MIDSIZE_ORDER = basic_order(
-	zone = 1,
-	weight = 1500,
-	timestamp = datetime(2030, 1, 5),
-)
-
-ZONE_5_ORDER = basic_order(
-	zone = 5,
-	weight = 1000,
-	timestamp = datetime(2030, 1, 6),
-)
-
-ZONE_12_ORDER = basic_order(
-	zone = 12,
-	weight = 1000,
-	timestamp = datetime(2030, 1, 7),
+from tests.test_data import (
+	BASIC_ORDER_1,
+	BASIC_ORDER_2,
+	LIGHT_ORDER,
+	MIDSIZE_ORDER,
+	OVERSIZE_ORDER,
+	ZONE_12_ORDER,
+	ZONE_5_ORDER
 )
 
 def run_tests():
