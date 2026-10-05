@@ -54,7 +54,7 @@ class DispatchServer:
 			self.delivery_drone.add_orders_to_trip(*trip)
 			try:
 				trips.pop(0)
-				self.delivery_drone.deliver_orders()  # Release the drone!
+				self.delivery_drone.run_trip() # Release the drone!
 			except DeliveryException as e:
 				print(e)
 				return

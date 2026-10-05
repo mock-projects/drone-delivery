@@ -30,16 +30,7 @@ class Drone:
 		'''
 		self.trip.add_orders(*orders)
 
-	def deliver_orders(self):
-		'''
-		Deliver all of the Orders attached to the Drone. If the Drone's battery dies
-		during the trip, it will throw a DeliveryException.
-		'''
-		self.battery_level = self.run_trip(self.trip, False)
-		if self.battery_level < 0:
-			raise DeliveryException('Drone battery died during trip!')
-
-	def run_trip(self, trip: Trip, use_simulated_trip: bool) -> float:
+	def run_trip(self, simulated_trip: Trip | None = None) -> float:
 		'''
 		Delivers a list of Orders attached to the Drone, returning the battery
 		charge level remaining on the Drone after delivery. Returns -1 if the
@@ -47,17 +38,29 @@ class Drone:
 		warehouse.
 
 		NOTE:
-		If simulated_trip is true, this method simulates a trip,
+		If a simulated_trip is given, this method simulates a trip,
 		rather than actually sending the Drone out. This can be useful for
 		determining whether the Drone would be able to complete a trip, given a
 		particular list of orders.
+
+		NOTE:
+		If a simulated_trip is not given and the Drone's battery dies during the
+		trip, then it will throw a DeliveryException.
 		'''
-		current_location: ZoneId = 0
+		# Determine whether this trip was simulated.
+		use_simulated_trip = False
+		trip = self.trip
+		if simulated_trip is not None:
+			use_simulated_trip = True
+			trip = Trip(*simulated_trip)
+
+		# Initialize drone payload weight.
 		payload_weight = 0
-		battery_level = 0
 		for order in trip:
 			payload_weight += order.weight
 
+		# Initialize drone battery levels.
+		battery_level = 0
 		if use_simulated_trip:
 			# We'll be simulating the trip, so we can assume a fully charged drone
 			battery_level = 100
@@ -66,39 +69,46 @@ class Drone:
 			battery_level = self.battery_level
 			print('\nHeaded out for delivery:')
 
-		delivered_order_count = 0
+		# Initialize the warehouse location.
+		warehouse_zone: ZoneId = 0
+		current_zone = warehouse_zone
+
+		# Deliver orders.
 		for order in trip:
 			if not use_simulated_trip:
 				print('\t▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄')
 				print('\t█ Delivering Order...')
 				order.print_details()
 
-			# Update drone battery, payload weight, and previous desination after
-			# delivering the order
-			distance = distance_between(current_location, order.delivery_zone)
+			# Update drone battery, payload weight,
+			# and previous desination after delivering the order.
+			next_zone: ZoneId = order.delivery_zone
+			distance = distance_between(current_zone, next_zone)
 			battery_level -= self.get_battery_usage(payload_weight, distance)
 			payload_weight -= order.weight
-			current_location = order.delivery_zone
 
-			# Exit the loop if the battery dies during the trip
+			# Update the current location with the next one.
+			current_zone = next_zone
+
+			# Exit the loop if the battery dies during the trip.
+			if battery_level < 0 and not use_simulated_trip:
+				raise DeliveryException
 			if battery_level < 0:
 				return -1
 			if not use_simulated_trip:
 				order.was_delivered = True
-				delivered_order_count += 1
 				print('\t█ ...Success!')
 				print('\t▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀')
 
-		# If this is a real trip, remove delivered orders from the list
-		if not use_simulated_trip:
-			trip = Trip()
+		final_stretch = distance_between(current_zone, warehouse_zone)
+		battery_level -= self.get_battery_usage(0, final_stretch)
 
-		battery_level -= self.get_battery_usage(
-			0, distance_between(current_location, 0)
-		)
-
+		if battery_level < 0 and not use_simulated_trip:
+			raise DeliveryException
 		if battery_level < 0:
 			return -1
+		if not use_simulated_trip:
+			self.trip = Trip() # Clear the trip and prepare a new run.
 		return battery_level
 
 	def simulate_trip_with_added_order(
