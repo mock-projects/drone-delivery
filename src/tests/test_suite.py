@@ -42,7 +42,7 @@ def test_simulate_trip_with_added_order():
 	'''Tests simulate_trip_with_added_order() with two orders.'''
 	print('test_simulate_trip_with_added_order: ')
 	test_drone = Drone()
-	test_drone.add_orders(BASIC_ORDER_1)
+	test_drone.add_orders_to_trip(BASIC_ORDER_1)
 
 	battery_remaining = test_drone.simulate_trip_with_added_order(BASIC_ORDER_2, 1)
 
@@ -59,7 +59,7 @@ def test_find_best_order_position():
 	'''
 	print('test_find_best_order_position: ')
 	test_drone = Drone()
-	test_drone.add_orders(BASIC_ORDER_1)
+	test_drone.add_orders_to_trip(BASIC_ORDER_1)
 
 	best_position = test_drone.find_best_order_position(LIGHT_ORDER)
 
@@ -75,9 +75,7 @@ def test_find_best_order_position_multizone():
 	'''
 	print('test_find_best_order_position_multizone: ')
 	test_drone = Drone()
-	test_drone.add_orders(BASIC_ORDER_1)
-	test_drone.add_orders(BASIC_ORDER_2)
-	test_drone.add_orders(ZONE_12_ORDER)
+	test_drone.add_orders_to_trip(BASIC_ORDER_1, BASIC_ORDER_2, ZONE_12_ORDER)
 
 	best_position = test_drone.find_best_order_position(ZONE_5_ORDER)
 
@@ -93,17 +91,19 @@ def test_build_trip():
 	'''
 	print('test_build_trip: ')
 	dispatch_server = DispatchServer()
-	dispatch_server.add_orders(ZONE_5_ORDER)
-	dispatch_server.add_orders(BASIC_ORDER_1)
-	dispatch_server.add_orders(LIGHT_ORDER)
-	dispatch_server.add_orders(MIDSIZE_ORDER)
-	dispatch_server.add_orders(OVERSIZE_ORDER)
-	dispatch_server.add_orders(BASIC_ORDER_2)
+	dispatch_server.add_orders(
+		ZONE_5_ORDER,
+		BASIC_ORDER_1,
+		LIGHT_ORDER,
+		MIDSIZE_ORDER,
+		OVERSIZE_ORDER,
+		BASIC_ORDER_2,
+	)
 
-	orders = dispatch_server.build_trip(zone=1)
+	trip = dispatch_server.build_trip(zone=1)
 
 	# Usually, new orders in the same zone are added to the beginning of the list
-	expected_orders = [
+	expected_sort01 = [
 		LIGHT_ORDER,
 		MIDSIZE_ORDER,
 		BASIC_ORDER_2,
@@ -111,7 +111,7 @@ def test_build_trip():
 	]
 
 	# But it's okay if your orders were added to the end of the list
-	expected_orders2 = [
+	expected_sort02 = [
 		BASIC_ORDER_1,
 		BASIC_ORDER_2,
 		MIDSIZE_ORDER,
@@ -119,9 +119,9 @@ def test_build_trip():
 	]
 
 	# Compare every order
-	either_match = (orders == expected_orders) or (orders == expected_orders2)
+	either_match = (trip.orders == expected_sort01) or (trip.orders == expected_sort02)
 
 	if either_match:
-		print('✅')
+		print('✅', 'Trip built correctly.\n')
 	else:
-		print('❌')
+		print('❌', 'Trip built in wrong order.\n')
