@@ -11,7 +11,7 @@ class Runner:
 		print('\nWelcome to the ' + codebase_title + ' codebase!')
 		print('Start by reading through the README file for your instructions,')
 		print('then familiarize yourself with the rest of the files in the codebase.')
-		print("When you're ready, start tackling the TODOs in the codebase.\n")
+		print('When you\'re ready, start tackling the TODOs in the codebase.\n')
 
 if __name__ == '__main__':
 	Runner().run()
