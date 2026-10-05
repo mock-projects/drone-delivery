@@ -89,40 +89,40 @@ def run_tests():
 
 def test_simulate_trip_with_added_order():
 	'''Tests simulate_trip_with_added_order() with two orders.'''
-	print('test_simulate_trip_with_added_order: ', end='')
+	print('test_simulate_trip_with_added_order: ')
 	test_drone = Drone()
 	test_drone.add_orders(BASIC_ORDER_1)
 
 	battery_remaining = test_drone.simulate_trip_with_added_order(BASIC_ORDER_2, 1)
 
 	correct_battery = 91.76896486023027
-	if battery_remaining == correct_battery:
-		print(battery_remaining, '✅')
+	if (battery_remaining == correct_battery):
+		print('✅', battery_remaining, '\n')
 	else:
-		print(battery_remaining, '❌')
+		print('❌', battery_remaining, '\n')
 
 def test_find_best_order_position():
 	'''
-	Tests find_best_order_position() with a single-zone delivery. The best
-	position should be 0.
+	Tests find_best_order_position() with a single-zone delivery.
+	The best position should be 0.
 	'''
-	print('test_find_best_order_position: ', end='')
+	print('test_find_best_order_position: ')
 	test_drone = Drone()
 	test_drone.add_orders(BASIC_ORDER_1)
 
 	best_position = test_drone.find_best_order_position(LIGHT_ORDER)
 
-	if best_position == 0:
-		print(best_position, '✅')
+	if (best_position == 0):
+		print('✅', 'best_position =', best_position, '\n')
 	else:
-		print(best_position, '❌')
+		print('❌', 'best_position =', best_position, '\n')
 
 def test_find_best_order_position_multizone():
 	'''
-	Tests test_find_best_order_position() with a multi-zone delivery. The best
-	position should be 2.
+	Tests test_find_best_order_position() with a multi-zone delivery.
+	The best position should be 2.
 	'''
-	print('test_find_best_order_position_multizone: ', end='')
+	print('test_find_best_order_position_multizone: ')
 	test_drone = Drone()
 	test_drone.add_orders(BASIC_ORDER_1)
 	test_drone.add_orders(BASIC_ORDER_2)
@@ -130,17 +130,17 @@ def test_find_best_order_position_multizone():
 
 	best_position = test_drone.find_best_order_position(ZONE_5_ORDER)
 
-	if best_position == 2:
-		print(best_position, '✅')
+	if (best_position == 2):
+		print('✅', 'best_position =', best_position, '\n')
 	else:
-		print(best_position, '❌')
+		print('❌', 'best_position =', best_position, '\n')
 
 def test_build_trip():
 	'''
-	Tests build_trip(). It should add orders from the given zone, based first on
-	timestamp, then weight.
+	Tests build_trip(). It should add orders from the given zone,
+	based first on timestamp, then weight.
 	'''
-	print('test_build_trip: ', end='')
+	print('test_build_trip: ')
 	dispatch_server = DispatchServer()
 	dispatch_server.add_orders(ZONE_5_ORDER)
 	dispatch_server.add_orders(BASIC_ORDER_1)
