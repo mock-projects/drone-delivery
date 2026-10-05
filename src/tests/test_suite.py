@@ -91,7 +91,7 @@ def test_simulate_trip_with_added_order():
 	'''Tests simulate_trip_with_added_order() with two orders.'''
 	print('test_simulate_trip_with_added_order: ', end='')
 	test_drone = Drone()
-	test_drone.orders.append(BASIC_ORDER_1)
+	test_drone.add_orders(BASIC_ORDER_1)
 
 	battery_remaining = test_drone.simulate_trip_with_added_order(BASIC_ORDER_2, 1)
 
@@ -108,7 +108,7 @@ def test_find_best_order_position():
 	'''
 	print('test_find_best_order_position: ', end='')
 	test_drone = Drone()
-	test_drone.orders.append(BASIC_ORDER_1)
+	test_drone.add_orders(BASIC_ORDER_1)
 
 	best_position = test_drone.find_best_order_position(LIGHT_ORDER)
 
@@ -124,9 +124,9 @@ def test_find_best_order_position_multizone():
 	'''
 	print('test_find_best_order_position_multizone: ', end='')
 	test_drone = Drone()
-	test_drone.orders.append(BASIC_ORDER_1)
-	test_drone.orders.append(BASIC_ORDER_2)
-	test_drone.orders.append(ZONE_12_ORDER)
+	test_drone.add_orders(BASIC_ORDER_1)
+	test_drone.add_orders(BASIC_ORDER_2)
+	test_drone.add_orders(ZONE_12_ORDER)
 
 	best_position = test_drone.find_best_order_position(ZONE_5_ORDER)
 
@@ -142,12 +142,12 @@ def test_build_trip():
 	'''
 	print('test_build_trip: ', end='')
 	dispatch_server = DispatchServer()
-	dispatch_server.add_order(ZONE_5_ORDER)
-	dispatch_server.add_order(BASIC_ORDER_1)
-	dispatch_server.add_order(LIGHT_ORDER)
-	dispatch_server.add_order(MIDSIZE_ORDER)
-	dispatch_server.add_order(OVERSIZE_ORDER)
-	dispatch_server.add_order(BASIC_ORDER_2)
+	dispatch_server.add_orders(ZONE_5_ORDER)
+	dispatch_server.add_orders(BASIC_ORDER_1)
+	dispatch_server.add_orders(LIGHT_ORDER)
+	dispatch_server.add_orders(MIDSIZE_ORDER)
+	dispatch_server.add_orders(OVERSIZE_ORDER)
+	dispatch_server.add_orders(BASIC_ORDER_2)
 
 	orders = dispatch_server.build_trip(zone=1)
 

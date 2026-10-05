@@ -21,7 +21,7 @@ If there is no position where the order can be added without the drone's battery
 
 In [dispatch_server.py], implement the method with the prototype `build_trip(self, zone)`.
 This method returns a list of `orders` to be delivered on the next drone trip.
-The returned list of `orders` should contain as many of the oldest unpackaged `orders` in the zone as possible without exceeding the drone's range.
+The returned list of `orders` should contain as many of the oldest pending `orders` in the zone as possible without exceeding the drone's range.
 Once an order exceeds the drone's range, any remaining capacity should be filled with other orders destined for this same zone, from heaviest to lightest (regardless of when the order was placed).
 
 Make use of the `payload_test_drone` to simulate trips to determine whether the `delivery_drone` will be able to accommodate an `order`.

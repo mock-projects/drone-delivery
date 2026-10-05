@@ -45,13 +45,11 @@ DISTANCE_MATRIX = [
 	[5,6,5,4,4,5,6,7,7,6,5,5,3,3,3,4,5,6,7,8,8,5,4,3,2,2,2,3,4,5,6,5,2,1,1,0],
 ]
 
-def distance_between(origin_zone, destination_zone):
+def distance_between(origin_zone: int, destination_zone: int) -> float:
 	'''
 	Returns the distance in kilometers between the centers of the given origin
 	and destination zones. If an invalid zone is provided, returns infinity.
 	'''
-	matrix_size = len(DISTANCE_MATRIX)
-	if (0 <= origin_zone < matrix_size) and (0 <= destination_zone < matrix_size):
-		return DISTANCE_MATRIX[origin_zone][destination_zone]
-	else:
-		return float('inf')
+	distance = DISTANCE_MATRIX[origin_zone][destination_zone]
+	if distance != None: return distance
+	return float('inf')
