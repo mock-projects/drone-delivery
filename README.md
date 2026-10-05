@@ -40,9 +40,9 @@ Implement this method in a way that resolves as many of these problems as you ar
 1. Our most common complaint is that customers' orders are sometimes split into separate trips, which makes pick-up a hassle.
 	Ensure that all orders for the same customer are always sent together in a single trip (unless they can't all fit on a drone at once).
 
-2. Some of our customers are Subscribers, which means they pay an annual fee in exchange for expedited shipping.
-	But some Subscribers are complaining that their packages are arriving too slowly.
-	Find a way to prioritize Subscriber orders so that they ship more quickly.
+2. Some of our customers are subscribers, which means they pay an annual fee in exchange for expedited shipping.
+	But some subscribers are complaining that their packages are arriving too slowly.
+	Find a way to prioritize expedited orders so that they ship more quickly.
 
 3. In rare circumstances, fragile packages bump into hazardous packages mid-flight and break - forcing us to pay out expensive refunds.
 	To stop this, ensure orders marked "fragile" are never sent in the same trip as orders marked "hazardous."

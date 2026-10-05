@@ -1,3 +1,5 @@
+from datetime import datetime
+
 class Order:
 	'''
 	An Order is a single user-purchased item to be delivered.
@@ -12,52 +14,26 @@ class Order:
 
 	def __init__(
 		self,
-		order_id,
-		order_timestamp,
-		delivery_zone,
-		weight,
-		user_id,
-		subscriber,
-		fragile,
-		hazardous,
-		perishable,
+		order_id: str,
+		user_id: str,
+		delivery_zone: int,
+		timestamp: datetime,
+		weight: float,
+		is_expedited: bool,
+		is_fragile: bool,
+		is_hazardous: bool,
+		is_perishable: bool,
 	):
-		self.order_id = order_id
-		self.timestamp = order_timestamp
-		self.delivery_zone = delivery_zone
-		self.weight = weight
-		self.user_id = user_id
-		self.subscriber = subscriber
-		self.fragile = fragile
-		self.hazardous = hazardous
-		self.perishable = perishable
-
-	def get_order_id(self):
-		return self.order_id
-
-	def get_timestamp(self):
-		return self.timestamp
-
-	def get_delivery_zone(self):
-		return self.delivery_zone
-
-	def get_weight(self):
-		return self.weight
-
-	def get_user_id(self):
-		return self.user_id
-
-	def is_subscriber(self):
-		return self.subscriber
-
-	def is_fragile(self):
-		return self.fragile
-
-	def is_hazardous(self):
-		return self.hazardous
-
-	def is_perishable(self):
-		return self.perishable
+		self.order_id: str = order_id
+		self.user_id: str = user_id
+		self.delivery_zone: int = delivery_zone
+		self.timestamp: datetime = timestamp
+		self.weight: float = weight
+		self.is_expedited: bool = is_expedited
+		self.is_fragile: bool = is_fragile
+		self.is_hazardous: bool = is_hazardous
+		self.is_perishable: bool = is_perishable
+		self.was_delivered: bool = False
 
 	def __str__(self):
 		return (

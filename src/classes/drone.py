@@ -51,7 +51,7 @@ class Drone:
 		payload_weight = 0
 		battery_level = 0
 		for order in orders:
-			payload_weight += order.get_weight()
+			payload_weight += order.weight
 
 		if simulated_trip:
 			# We'll be simulating the trip, so we can assume a fully charged drone
@@ -65,21 +65,22 @@ class Drone:
 		for order in orders:
 			if not simulated_trip:
 				print(
-					f'  Delivering Order #{order.get_order_id()}'
-					+ f' to zone {order.get_delivery_zone()}...'
+					f'  Delivering Order #{order.order_id}'
+					+ f' to zone {order.delivery_zone}...'
 				)
 
 			# Update drone battery, payload weight, and previous desination after
 			# delivering the order
-			distance = distance_between(current_location, order.get_delivery_zone())
+			distance = distance_between(current_location, order.delivery_zone)
 			battery_level -= self.get_battery_usage(payload_weight, distance)
-			payload_weight -= order.get_weight()
-			current_location = order.get_delivery_zone()
+			payload_weight -= order.weight
+			current_location = order.delivery_zone
 
 			# Exit the loop if the battery dies during the trip
 			if battery_level < 0:
 				return -1
 			if not simulated_trip:
+				order.was_delivered = True
 				delivered_order_count += 1
 				print('    Complete!')
 

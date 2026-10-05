@@ -7,20 +7,66 @@ fully correct. If you have time, add some tests of your own to help verify your
 solutions.
 '''
 
+from datetime import datetime
+
 from classes.dispatch_server import DispatchServer
 from classes.drone import Drone
 from classes.order import Order
 
-def basic_order(zone, weight, timestamp):
-	return Order(0, timestamp, zone, weight, 0, False, False, False, False)
+def basic_order(zone: int, weight: float, timestamp: datetime):
+	return Order(
+		order_id = '0',
+		timestamp = timestamp,
+		delivery_zone = zone,
+		weight = weight,
+		user_id = '0',
+		is_expedited = False,
+		is_fragile = False,
+		is_hazardous = False,
+		is_perishable = False,
+	)
 
-BASIC_ORDER_1 = basic_order(zone=1, weight=1000, timestamp=0)
-BASIC_ORDER_2 = basic_order(zone=1, weight=1000, timestamp=1)
-OVERSIZE_ORDER = basic_order(zone=1, weight=50000, timestamp=2)
-LIGHT_ORDER = basic_order(zone=1, weight=500, timestamp=3)
-MIDSIZE_ORDER = basic_order(zone=1, weight=1500, timestamp=4)
-ZONE_5_ORDER = basic_order(zone=5, weight=1000, timestamp=5)
-ZONE_12_ORDER = basic_order(zone=12, weight=1000, timestamp=6)
+BASIC_ORDER_1 = basic_order(
+	zone = 1,
+	weight = 1000,
+	timestamp = datetime(2030, 1, 1),
+)
+
+BASIC_ORDER_2 = basic_order(
+	zone = 1,
+	weight = 1000,
+	timestamp = datetime(2030, 1, 2),
+)
+
+OVERSIZE_ORDER = basic_order(
+	zone = 1,
+	weight = 50000,
+	timestamp = datetime(2030, 1, 3),
+)
+
+LIGHT_ORDER = basic_order(
+	zone = 1,
+	weight = 500,
+	timestamp = datetime(2030, 1, 4),
+)
+
+MIDSIZE_ORDER = basic_order(
+	zone = 1,
+	weight = 1500,
+	timestamp = datetime(2030, 1, 5),
+)
+
+ZONE_5_ORDER = basic_order(
+	zone = 5,
+	weight = 1000,
+	timestamp = datetime(2030, 1, 6),
+)
+
+ZONE_12_ORDER = basic_order(
+	zone = 12,
+	weight = 1000,
+	timestamp = datetime(2030, 1, 7),
+)
 
 def run_tests():
 	'''Runs all of the tests.'''
@@ -106,12 +152,22 @@ def test_build_trip():
 	orders = dispatch_server.build_trip(zone=1)
 
 	# Usually, new orders in the same zone are added to the beginning of the list
-	expected_orders = [LIGHT_ORDER, MIDSIZE_ORDER, BASIC_ORDER_2, BASIC_ORDER_1]
+	expected_orders = [
+		LIGHT_ORDER,
+		MIDSIZE_ORDER,
+		BASIC_ORDER_2,
+		BASIC_ORDER_1,
+	]
 
 	# But it's okay if your orders were added to the end of the list
-	expected_orders2 = [BASIC_ORDER_1, BASIC_ORDER_2, MIDSIZE_ORDER, LIGHT_ORDER]
+	expected_orders2 = [
+		BASIC_ORDER_1,
+		BASIC_ORDER_2,
+		MIDSIZE_ORDER,
+		LIGHT_ORDER,
+	]
 
-	# compare every order
+	# Compare every order
 	either_match = (orders == expected_orders) or (orders == expected_orders2)
 
 	if either_match:

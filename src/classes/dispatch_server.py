@@ -26,7 +26,7 @@ class DispatchServer:
 				trip = self.build_better_trip()
 			else:
 				earliest_order = self.unpackaged_orders[0]
-				trip = self.build_trip(earliest_order.get_delivery_zone())
+				trip = self.build_trip(earliest_order.delivery_zone)
 
 			# Exit the loop if no orders are added to the trip
 			if not trip:
