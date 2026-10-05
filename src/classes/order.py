@@ -1,5 +1,10 @@
 from datetime import datetime
 
+from classes.user import UserId
+from classes.zone import ZoneId
+
+type OrderId = str
+
 class Order:
 	'''
 	An Order is a single user-purchased item to be delivered.
@@ -14,9 +19,9 @@ class Order:
 
 	def __init__(
 		self,
-		order_id: str,
-		user_id: str,
-		delivery_zone: int,
+		order_id: OrderId,
+		user_id: UserId,
+		delivery_zone: ZoneId,
 		timestamp: datetime,
 		weight: float,
 		is_expedited: bool,
@@ -24,9 +29,9 @@ class Order:
 		is_hazardous: bool,
 		is_perishable: bool,
 	):
-		self.order_id: str = order_id
-		self.user_id: str = user_id
-		self.delivery_zone: int = delivery_zone
+		self.order_id: OrderId = order_id
+		self.user_id: UserId = user_id
+		self.delivery_zone: ZoneId = delivery_zone
 		self.timestamp: datetime = timestamp
 		self.weight: float = weight
 		self.is_expedited: bool = is_expedited

@@ -1,6 +1,7 @@
 from typing import SupportsIndex
 
 from classes.order import Order
+from classes.zone import ZoneId
 from utilities.delivery_utils import distance_between
 
 class Drone:
@@ -51,7 +52,7 @@ class Drone:
 		determining whether the Drone would be able to complete a trip, given a
 		particular list of orders.
 		'''
-		current_location = 0
+		current_location: ZoneId = 0
 		payload_weight = 0
 		battery_level = 0
 		for order in orders:
