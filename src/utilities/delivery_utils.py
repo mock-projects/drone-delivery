@@ -3,6 +3,9 @@ This file stores some valuable utility functions for the drone warehouse
 server, including a function that gets the distance between zones.
 '''
 
+from collections import defaultdict
+
+from classes.order import Order
 from classes.user import UserId
 from classes.zone import ZONE_DISTANCE_MATRIX, ZoneId
 
@@ -11,6 +14,18 @@ type Location = tuple[ZoneId, UserId | None]
 # This represents the location of a warehouse. Our main warehouse is at zone 0.
 # The UserId in this tuple is None, since a warehouse has no UserId.
 WAREHOUSE_LOCATION: Location = (0, None)
+
+def bundle_orders_by_customer(
+	orders: list[Order],
+) -> dict[UserId, list[Order]]:
+	'''
+	This function helps group up orders that are delivering to the same customer
+	address. Returns a dictionary of user IDs mapped to a list of their orders.
+	'''
+	bundles: dict[UserId, list[Order]] = defaultdict(list)
+	for order in orders:
+		bundles[order.user_id].append(order)
+	return bundles
 
 def distance_between(origin_location: Location, destination_location: Location) -> float:
 	'''
