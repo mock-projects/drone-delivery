@@ -68,8 +68,22 @@ class DispatchServer:
 		with other Orders destined for this same zone from heaviest to lightest
 		(regardless of when the Order was placed).
 		'''
-		# TODO: Implement this function. See the README for details.
-		return Trip()
+		test_drone = Drone() # Create test drone.
+		orders = [*self.pending_orders] # Copy unpackaged orders list.
+
+		# First, filter our orders by zone.
+		orders = filter(lambda x: x.delivery_zone == zone, orders)
+
+		# Then sort by timestamp (oldest orders first).
+		orders = sorted(orders, key=lambda x: x.timestamp)
+		orders = test_drone.plan_trip(orders, exit_on_mismatch=True)
+
+		# Next sort by order weight (heaviest orders first) and fill.
+		orders = sorted(orders, key=lambda x: x.weight, reverse=True)
+		orders = test_drone.plan_trip(orders, exit_on_mismatch=False)
+
+		# Finally, return the trip.
+		return test_drone.trip
 
 	def build_better_trip(self) -> Trip:
 		'''Returns a trip that addresses some of our customer concerns.'''
