@@ -2,8 +2,11 @@ from typing import SupportsIndex
 
 from classes.order import Order
 from classes.trip import Trip
-from classes.zone import ZoneId
-from utilities.delivery_utils import distance_between
+from utilities.delivery_utils import (
+	WAREHOUSE_LOCATION,
+	Location,
+	distance_between,
+)
 
 class Drone:
 	'''
@@ -70,8 +73,7 @@ class Drone:
 			print('\nHeaded out for delivery:')
 
 		# Initialize the warehouse location.
-		warehouse_zone: ZoneId = 0
-		current_zone = warehouse_zone
+		current_location = WAREHOUSE_LOCATION
 
 		# Deliver orders.
 		for order in trip:
@@ -82,13 +84,13 @@ class Drone:
 
 			# Update drone battery, payload weight,
 			# and previous desination after delivering the order.
-			next_zone: ZoneId = order.delivery_zone
-			distance = distance_between(current_zone, next_zone)
+			next_location: Location = (order.delivery_zone, order.user_id)
+			distance = distance_between(current_location, next_location)
 			battery_level -= self.get_battery_usage(payload_weight, distance)
 			payload_weight -= order.weight
 
 			# Update the current location with the next one.
-			current_zone = next_zone
+			current_location = next_location
 
 			# Exit the loop if the battery dies during the trip.
 			if battery_level < 0 and not use_simulated_trip:
@@ -100,7 +102,7 @@ class Drone:
 				print('\t█ ...Success!')
 				print('\t▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀')
 
-		final_stretch = distance_between(current_zone, warehouse_zone)
+		final_stretch = distance_between(current_location, WAREHOUSE_LOCATION)
 		battery_level -= self.get_battery_usage(0, final_stretch)
 
 		if battery_level < 0 and not use_simulated_trip:
