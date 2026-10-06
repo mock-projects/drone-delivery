@@ -1,5 +1,6 @@
 from classes.drone import DeliveryException, Drone
 from classes.order import Order
+from classes.trip import Trip
 
 class DispatchServer:
 	'''The warehouse server that handles order packaging and deliveries.'''
@@ -17,10 +18,10 @@ class DispatchServer:
 		Uses build_trip (or build_better_trip) to organize the
 		pending Orders into a list of packaged trips.
 		'''
-		trips = []
+		trips: list[Trip] = []
 
 		while self.pending_orders:
-			trip = []
+			trip = Trip()
 
 			# Build a trip
 			if use_better_trip:
@@ -46,11 +47,11 @@ class DispatchServer:
 			order.print_details()
 			print('\t▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀')
 
-	def deliver_orders(self, trips: list[list[Order]]):
-		'''Uses the delivery_drone to deliver all of the packaged trips.'''
+	def deliver_orders(self, trips: list[Trip]):
+		'''Uses the delivery_drone to process all drone trips.'''
 		while trips:
 			trip = trips[0]
-			self.delivery_drone.add_orders(*trip)
+			self.delivery_drone.add_orders_to_trip(*trip)
 			try:
 				trips.pop(0)
 				self.delivery_drone.deliver_orders()  # Release the drone!
@@ -59,18 +60,18 @@ class DispatchServer:
 				return
 			self.delivery_drone.recharge_battery()
 
-	def build_trip(self, zone: int) -> list[Order]:
+	def build_trip(self, zone: int) -> Trip:
 		'''
-		Returns a list of as many of the oldest pending Orders in the zone as
+		Returns a Trip object with as many oldest pending Orders in the zone as
 		possible without the Drone's battery dying. Once an Order that can't be
 		accommodated is encountered, any remaining capacity should be filled
 		with other Orders destined for this same zone from heaviest to lightest
 		(regardless of when the Order was placed).
 		'''
 		# TODO: Implement this function. See the README for details.
-		return []
+		return Trip()
 
-	def build_better_trip(self) -> list[Order]:
+	def build_better_trip(self) -> Trip:
 		'''Returns a trip that addresses some of our customer concerns.'''
 		# TODO: Implement this function. See the README for details.
-		return []
+		return Trip()

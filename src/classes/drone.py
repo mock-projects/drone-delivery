@@ -1,6 +1,7 @@
 from typing import SupportsIndex
 
 from classes.order import Order
+from classes.trip import Trip
 from classes.zone import ZoneId
 from utilities.delivery_utils import distance_between
 
@@ -16,30 +17,29 @@ class Drone:
 
 	def __init__(self):
 		self.battery_level: float = 100
-		self.orders: list[Order] = []
+		self.trip = Trip()
 
-	def insert_order(self, order: Order, position: SupportsIndex):
-		'''Adds the given Order to the Drone's list of Orders at a given position.'''
-		self.orders.insert(position, order)
+	def insert_order_into_trip(self, order: Order, position: SupportsIndex):
+		'''Adds the given Order to the Drone's Trip at a given position.'''
+		self.trip.add_order(order, position)
 
-	def add_orders(self, *orders: Order):
+	def add_orders_to_trip(self, *orders: Order):
 		'''
-		Adds multiple given Orders to the Drone's list of Orders.
-		This assumes that each new order is added at the end of the list.
+		Adds multiple given Orders to the Drone's Trip.
+		This assumes that each new order is added at the end of the trip.
 		'''
-		for order in orders:
-			self.insert_order(order, -1)
+		self.trip.add_orders(*orders)
 
 	def deliver_orders(self):
 		'''
 		Deliver all of the Orders attached to the Drone. If the Drone's battery dies
 		during the trip, it will throw a DeliveryException.
 		'''
-		self.battery_level = self.run_trip(self.orders, False)
+		self.battery_level = self.run_trip(self.trip, False)
 		if self.battery_level < 0:
 			raise DeliveryException('Drone battery died during trip!')
 
-	def run_trip(self, orders: list[Order], use_simulated_trip: bool) -> float:
+	def run_trip(self, trip: Trip, use_simulated_trip: bool) -> float:
 		'''
 		Delivers a list of Orders attached to the Drone, returning the battery
 		charge level remaining on the Drone after delivery. Returns -1 if the
@@ -55,7 +55,7 @@ class Drone:
 		current_location: ZoneId = 0
 		payload_weight = 0
 		battery_level = 0
-		for order in orders:
+		for order in trip:
 			payload_weight += order.weight
 
 		if use_simulated_trip:
@@ -67,7 +67,7 @@ class Drone:
 			print('\nHeaded out for delivery:')
 
 		delivered_order_count = 0
-		for order in orders:
+		for order in trip:
 			if not use_simulated_trip:
 				print('\t▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄')
 				print('\t█ Delivering Order...')
@@ -91,8 +91,7 @@ class Drone:
 
 		# If this is a real trip, remove delivered orders from the list
 		if not use_simulated_trip:
-			for _ in range(delivered_order_count):
-				orders.pop(0)
+			trip = Trip()
 
 		battery_level -= self.get_battery_usage(
 			0, distance_between(current_location, 0)
