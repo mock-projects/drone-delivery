@@ -35,9 +35,26 @@ class Trip:
 	def has_fragile_orders(self):
 		return any(order.is_fragile for order in self)
 
+	@property
+	def has_frazardous_orders(self):
+		return any(order.is_frazardous for order in self)
+
+	@property
+	def has_sensitive_orders(self):
+		return any(order.is_sensitive for order in self)
+
 	def order_is_compatible(self, order: Order):
 		'''Returns true if the order is compatible with the trip, depending on tags.'''
-		# TODO: Build a method that accepts or rejects an order into a trip.
+		if (not self.has_sensitive_orders) or (not order.is_sensitive):
+			return True
+		if self.has_frazardous_orders and order.is_sensitive:
+			return False
+		if self.has_fragile_orders and order.is_hazardous:
+			return False
+		if self.has_hazardous_orders and order.is_fragile:
+			return False
+
+		# Sensitive flags have passed; new order is compatible.
 		return True
 
 	def add_order(self, order: Order, position: SupportsIndex | None = None):

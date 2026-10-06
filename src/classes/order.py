@@ -40,6 +40,16 @@ class Order:
 		self.is_perishable: bool = is_perishable
 		self.was_delivered: bool = False
 
+	@property
+	def is_frazardous(self):
+		'''Used to determine if the order has both special handling tags.'''
+		return self.is_fragile and self.is_hazardous
+
+	@property
+	def is_sensitive(self):
+		'''Used to determine if the order has any special handling tags at all.'''
+		return self.is_fragile or self.is_hazardous
+
 	def __repr__(self):
 		return (
 			f'Order {self.order_id} at {self.timestamp} to {self.delivery_zone} '
