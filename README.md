@@ -21,7 +21,7 @@ If there is no position where the order can be added without the drone's battery
 
 In [dispatch_server.py], implement the method with the prototype `build_trip(self, zone)`.
 This method returns a list of `orders` to be delivered on the next drone trip.
-The returned list of `orders` should contain as many of the oldest unpackaged `orders` in the zone as possible without exceeding the drone's range.
+The returned list of `orders` should contain as many of the oldest pending `orders` in the zone as possible without exceeding the drone's range.
 Once an order exceeds the drone's range, any remaining capacity should be filled with other orders destined for this same zone, from heaviest to lightest (regardless of when the order was placed).
 
 Make use of the `payload_test_drone` to simulate trips to determine whether the `delivery_drone` will be able to accommodate an `order`.
@@ -40,9 +40,9 @@ Implement this method in a way that resolves as many of these problems as you ar
 1. Our most common complaint is that customers' orders are sometimes split into separate trips, which makes pick-up a hassle.
 	Ensure that all orders for the same customer are always sent together in a single trip (unless they can't all fit on a drone at once).
 
-2. Some of our customers are Subscribers, which means they pay an annual fee in exchange for expedited shipping.
-	But some Subscribers are complaining that their packages are arriving too slowly.
-	Find a way to prioritize Subscriber orders so that they ship more quickly.
+2. Some of our customers are subscribers, which means they pay an annual fee in exchange for expedited shipping.
+	But some subscribers are complaining that their packages are arriving too slowly.
+	Find a way to prioritize expedited orders so that they ship more quickly.
 
 3. In rare circumstances, fragile packages bump into hazardous packages mid-flight and break - forcing us to pay out expensive refunds.
 	To stop this, ensure orders marked "fragile" are never sent in the same trip as orders marked "hazardous."
