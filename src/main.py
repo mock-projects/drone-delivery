@@ -1,11 +1,11 @@
 from classes.dispatch_server import DispatchServer
-from tests.test_data import BASIC_TEST_ORDERS
+from tests.test_data import BASIC_ORDERS
 from tests.test_suite import run_tests
 from utilities.system_utils import create_argument_parser
 
 def main():
 	server = DispatchServer()
-	server.add_orders(*BASIC_TEST_ORDERS)
+	server.add_orders(*BASIC_ORDERS)
 	server.package_and_deliver_trips(use_better_trip=True)
 
 def test():
