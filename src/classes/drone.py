@@ -123,8 +123,10 @@ class Drone:
 		deliver all of the Orders already in its Order list, plus the given new_order
 		(which would be added to the Order list at the given position).
 		'''
-		# TODO: Implement this function. See the README for details.
-		return -1
+		simulated_trip = Trip(*self.trip) # Copies the orders list.
+		simulated_trip.add_order(new_order, position)
+		batt = self.run_trip(simulated_trip) # Obtains battery level.
+		return batt
 
 	def find_best_order_position(self, new_order: Order) -> SupportsIndex:
 		'''
