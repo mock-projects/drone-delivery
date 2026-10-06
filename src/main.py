@@ -11,15 +11,7 @@ def main():
 def test():
 	run_tests()
 
-def print_intro():
-	print('\nWelcome to the Drone Delivery codebase!')
-	print('Start by reading through the README file for your instructions,')
-	print('then familiarize yourself with the rest of the files in the codebase.')
-	print('When you\'re ready, start tackling the TODOs in the codebase.\n')
-
-
 if __name__ == '__main__':
-	print_intro() # Print introductory text on-run.
-	args = create_argument_parser().parse_args()
+	args = create_argument_parser().parse_args() # Get command-line args.
 	if args.test: test()
 	else: main()
