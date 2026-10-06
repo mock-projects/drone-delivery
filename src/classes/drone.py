@@ -136,8 +136,21 @@ class Drone:
 		no positions where the Order can be added without the Drone failing its
 		trip, returns -1.
 		'''
-		# TODO: Implement this function. See the README for details.
-		return -1
+		# Initialize position and battery at -1 (representing none found).
+		best_pos = -1
+		best_batt = -1
+
+		# Obtain the index where the drone's battery would be highest after a trip.
+		pos = 0
+		while pos <= len(self.trip):
+			batt = self.simulate_trip_with_added_order(new_order, pos)
+			if batt >= 0 and batt > best_batt:
+				best_pos = pos
+				best_batt = batt
+			# Increment insertion index
+			pos += 1
+
+		return best_pos
 
 	def recharge_battery(self):
 		'''Sets the battery to full (100).'''
