@@ -10,6 +10,7 @@ solutions.
 from classes.dispatch_server import DispatchServer
 from classes.drone import Drone
 from tests.test_data import (
+	ADVANCED_ORDERS,
 	BASIC_ORDER_1,
 	BASIC_ORDER_2,
 	LIGHT_ORDER,
@@ -36,7 +37,8 @@ def run_tests():
 	test_build_trip()
 
 	# Task 3 tests
-	# No tests provided; add your own tests here!
+	print('\n~~~ Task 3: Build Better Trip ~~~\n')
+	test_build_better_trip()
 
 def test_simulate_trip_with_added_order():
 	'''Tests simulate_trip_with_added_order() with two orders.'''
@@ -125,3 +127,43 @@ def test_build_trip():
 		print('✅', 'Trip built correctly.\n')
 	else:
 		print('❌', 'Trip built in wrong order.\n')
+
+def test_build_better_trip():
+	'''
+	Tests build_better_trip() with a richer mix of perishable,
+	fragile, hazardous, and expedited bundles.
+	The trip should include a subset of the available orders, never duplicates,
+	and should prioritize the most urgent bundle ordering rules.
+	'''
+	print('test_build_better_trip: ')
+	dispatch_server = DispatchServer()
+	dispatch_server.add_orders(*ADVANCED_ORDERS)
+
+	trip = dispatch_server.build_better_trip()
+	trip_ids = [order.order_id for order in trip]
+	all_ids = {order.order_id for order in ADVANCED_ORDERS}
+
+	# The trip should only contain valid orders from the test set and should not
+	# contain duplicates.
+	if not trip:
+		print('❌', 'No trip data.\n')
+		return
+	if len(trip_ids) != len(set(trip_ids)):
+		print('❌', 'Duplicate order IDs were used.\n')
+		return
+	if any(order_id not in all_ids for order_id in trip_ids):
+		print('❌', 'Orphaned order IDs were found.\n')
+		return
+
+	# The first bundle should still include at least one is_perishable or premium item.
+	first_order = trip[0]
+	if not (
+		first_order.is_expedited or
+		first_order.is_perishable or
+		first_order.is_fragile or
+		first_order.is_hazardous
+	):
+		print('❌', 'A special item tag should be prioritized.\n')
+		return
+
+	print('✅', 'No issues found with trip.\n')

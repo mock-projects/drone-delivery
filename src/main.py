@@ -1,17 +1,17 @@
+from classes.dispatch_server import DispatchServer
+from tests.test_data import BACKLOG_ORDERS
 from tests.test_suite import run_tests
+from utilities.system_utils import create_argument_parser
 
-class Runner:
-	def run(self):
-		self.print_intro('Drone Delivery')
+def main():
+	server = DispatchServer()
+	server.add_orders(*BACKLOG_ORDERS)
+	server.package_and_deliver_trips(use_better_trip=True)
 
-		run_tests()
-
-	def print_intro(self, codebase_title):
-		'''Prints a brief intro to the codebase.'''
-		print('\nWelcome to the ' + codebase_title + ' codebase!')
-		print('Start by reading through the README file for your instructions,')
-		print('then familiarize yourself with the rest of the files in the codebase.')
-		print('When you\'re ready, start tackling the TODOs in the codebase.\n')
+def test():
+	run_tests()
 
 if __name__ == '__main__':
-	Runner().run()
+	args = create_argument_parser().parse_args() # Get command-line args.
+	if args.test: test()
+	else: main()
