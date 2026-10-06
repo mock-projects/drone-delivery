@@ -33,6 +33,50 @@ class Drone:
 		'''
 		self.trip.add_orders(*orders)
 
+	def plan_trip(
+		self,
+		orders: list[Order],
+		exit_on_mismatch: bool = False
+	):
+		'''
+		This function can be used to fill up a drone with orders.
+		Usually, a sorted list of orders is given to the drone, to prioritize them.
+
+		NOTE:
+		It may not be immediately obvious, but this function does return a list of
+		remaining orders that were not used to fill up the drone's trip.
+		This can prove quite important when determining which orders still need fulfilled.
+		'''
+		remaining_orders = [*orders]
+		for order in orders:
+			found_mismatch = False
+
+			# Determine if the order is compatible with this Drone's Trip.
+			if not self.trip.order_is_compatible(order):
+				found_mismatch = True
+				if exit_on_mismatch: break
+
+			pos = -1
+			batt = -1
+
+			if not found_mismatch:
+				# Find the position with the best remaining battery level.
+				pos = self.find_best_order_position(order)
+				batt = self.simulate_trip_with_added_order(order, pos)
+
+			# Determine whether the drone would die with the new Trip.
+			if batt < 0:
+				found_mismatch = True
+				if exit_on_mismatch: break
+
+			# All flags passed, add the order to the trip!
+			if not found_mismatch:
+				remaining_orders.remove(order)
+				self.insert_order_into_trip(order, pos)
+
+		# Return the orders that have been rejected from the trip.
+		return remaining_orders
+
 	def run_trip(self, simulated_trip: Trip | None = None) -> float:
 		'''
 		Delivers a list of Orders attached to the Drone, returning the battery
