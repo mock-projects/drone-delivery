@@ -1,8 +1,16 @@
+import argparse
 import csv
 from datetime import datetime
 from pathlib import Path
 
 from classes.order import Order
+
+def create_argument_parser() -> argparse.ArgumentParser:
+	'''Create the CLI parser for selecting how the application runs.'''
+	parser = argparse.ArgumentParser(description='Run the Drone Delivery application.')
+	mode = parser.add_mutually_exclusive_group()
+	mode.add_argument('--test', action='store_true', help='Run the test suite.')
+	return parser
 
 def read_orders_from_csv(path: str | Path) -> list[Order]:
 	'''Read typed Order objects from a CSV file with an Order header row.'''
